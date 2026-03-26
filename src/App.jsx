@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 // ─── قاعدة بيانات الأذكار الكاملة من السنة النبوية ──────────────────────────
 const AZKAR_DB = {
@@ -184,7 +184,7 @@ const AZKAR_DB = {
       id: "e5",
       text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
       fadl: "من أذكار المساء الثابتة عن النبي ﷺ",
-      source: "رواه مسلم",
+      source: "رواه muslim",
       count: 1,
     },
     {
@@ -362,6 +362,29 @@ export default function AzkarApp() {
   const [dark, setDark] = useState(false);
   const [fs, setFs] = useState("md");
   const [cat, setCat] = useState("صباح");
+  const [showAd, setShowAd] = useState(false);
+  // ── منطق زر التثبيت ──
+  const [installPrompt, setInstallPrompt] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowAd(true), 20000);
+    
+    // لقط حدث "جاهز للتثبيت"
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    });
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleInstallClick = () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    installPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') setInstallPrompt(null);
+    });
+  };
 
   const azkar = useMemo(() => AZKAR_DB[cat], [cat]);
   const { counters, completed, shaking, pulseId, handleCount, reset } = useAzkarState(azkar);
@@ -419,6 +442,16 @@ export default function AzkarApp() {
             </div>
           </div>
           <div style={{ display:"flex",gap:8,alignItems:"center" }}>
+            {/* زر تثبيت التطبيق يظهر فقط عند توفر الميزة */}
+            {installPrompt && (
+              <button onClick={handleInstallClick} style={{
+                background: clr.gold, color: clr.goldTxt,
+                padding: "6px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+                display: "flex", alignItems: "center", gap: 5, animation: "up .3s ease"
+              }}>
+                <span>ثبت التطبيق</span> 📱
+              </button>
+            )}
             <div style={{ display:"flex",borderRadius:10,overflow:"hidden",border:`1px solid ${clr.border}` }}>
               {["sm","md","lg"].map(s => (
                 <button key={s} onClick={() => setFs(s)} style={{
@@ -545,13 +578,46 @@ export default function AzkarApp() {
         )}
       </main>
 
+
+      {/* ── بانر الإعلان — يظهر بعد 20 ثانية ── */}
+      {showAd && (
+        <div style={{
+          position:"fixed",bottom:0,left:0,right:0,zIndex:100,
+          display:"flex",flexDirection:"column",alignItems:"center",
+        }}>
+          {/* زر الإغلاق */}
+          <button
+            onClick={() => setShowAd(false)}
+            style={{
+              alignSelf:"flex-end",marginBottom:2,marginLeft:8,marginRight:8,
+              width:24,height:24,borderRadius:"50%",
+              background:"rgba(0,0,0,0.5)",color:"#fff",
+              fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",
+              cursor:"pointer",border:"none",lineHeight:1,
+            }}
+          >✕</button>
+
+          {/* ضع كود الإعلان هنا */}
+          <div style={{
+            width:"100%",maxWidth:520,minHeight:60,
+            background: dark ? "#1a1d27" : "#fff",
+            borderTop:`1px solid ${clr.border}`,
+            display:"flex",alignItems:"center",justifyContent:"center",
+            padding:"8px 16px",
+          }}>
+            {/* === كود الإعلان === */}
+
+            {/* === نهاية كود الإعلان === */}
+          </div>
+        </div>
+      )}
       <footer style={{
         position:"fixed",bottom:0,left:0,right:0,
         background:clr.card,borderTop:`1px solid ${clr.border}`,
         padding:"8px 16px",textAlign:"center",
       }}>
         <p style={{ fontSize:12,color:clr.sub }}>
-          {allDone ? `✓ اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
+          {allDone ? `✓    اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
         </p>
       </footer>
     </div>
