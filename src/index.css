@@ -1,0 +1,4 @@
+@theme {
+  --font-cairo: "Cairo", sans-serif;
+}
+@import "tailwindcss";
