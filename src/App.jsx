@@ -1,15 +1,12 @@
-<<<<<<< HEAD
+import React from 'react'
 import { useState, useCallback, useMemo, useEffect } from "react";
-=======
-import React, { useState, useCallback, useMemo, useEffect } from "react";
->>>>>>> new version
 
 // ─── قاعدة بيانات الأذكار الكاملة من السنة النبوية ──────────────────────────
 const AZKAR_DB = {
   صباح: [
     {
       id: "s1",
-      text: "اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا  ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+      text: "اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
       fadl: "من قرأها حين يصبح أُجير من الجن حتى يمسي",
       source: "رواه الطبراني",
       count: 1,
@@ -375,17 +372,14 @@ export default function AzkarApp() {
   useEffect(() => {
     const timer = setTimeout(() => setShowAd(true), 20000);
 
-    // كشف iOS
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     setIsIOS(ios);
 
-    // إخفاء الزر إذا الموقع مفتوح أصلاً كـ PWA مثبّت
     const mq = window.matchMedia('(display-mode: standalone)');
     if (mq.matches) setIsInstalled(true);
     const mqHandler = (e) => { if (e.matches) setIsInstalled(true); };
     mq.addEventListener('change', mqHandler);
 
-    // لقط حدث التثبيت (Android/Chrome)
     const handlePrompt = (e) => {
       e.preventDefault();
       setInstallPrompt(e);
@@ -458,7 +452,6 @@ export default function AzkarApp() {
         ::-webkit-scrollbar-thumb{background:#c9a84c33;border-radius:2px}
       `}</style>
 
-      {/* Header */}
       <header style={{ position:"sticky",top:0,zIndex:50,background:clr.card,borderBottom:`1px solid ${clr.border}` }}>
         <div style={{ maxWidth:520,margin:"0 auto",padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between" }}>
           <div style={{ display:"flex",alignItems:"center",gap:10 }}>
@@ -494,15 +487,8 @@ export default function AzkarApp() {
         </div>
       </header>
 
-<<<<<<< HEAD
-      {/* ── بانر التثبيت — يظهر.   دائماً ما لم يكن التطبيق مثبتاً ── */}
-=======
-      {/* ── بانر التثبيت — يظهر دائماً ما لم يكن التطبيق مثبتاً ── */}
->>>>>>> new version
       {!isInstalled && (
-        <div style={{
-          maxWidth:520,margin:"0 auto",padding:"8px 16px 0",
-        }}>
+        <div style={{ maxWidth:520,margin:"0 auto",padding:"8px 16px 0" }}>
           <button onClick={handleInstall} style={{
             width:"100%",padding:"10px 16px",borderRadius:12,
             background:`${clr.gold}18`,border:`1px solid ${clr.gold}55`,
@@ -510,14 +496,11 @@ export default function AzkarApp() {
             fontFamily:"inherit",cursor:"pointer",transition:"all .2s",
           }}>
             <span style={{ fontSize:18 }}>📲</span>
-            <span style={{ fontSize:13,fontWeight:700,color:clr.gold }}>
-              أضف التطبيق لشاشتك الرئيسية
-            </span>
+            <span style={{ fontSize:13,fontWeight:700,color:clr.gold }}>أضف التطبيق لشاشتك الرئيسية</span>
           </button>
         </div>
       )}
 
-      {/* Tabs */}
       <div style={{ maxWidth:520,margin:"0 auto",padding:"10px 16px 6px",display:"flex",gap:8 }}>
         {["صباح","مساء"].map(c => (
           <button key={c} onClick={() => setCat(c)} style={{
@@ -536,7 +519,6 @@ export default function AzkarApp() {
         }}>↺ إعادة</button>
       </div>
 
-      {/* Cards */}
       <main style={{ maxWidth:520,margin:"0 auto",padding:"8px 16px 90px" }}>
         {azkar.map((z, i) => {
           const isDone = completed[z.id];
@@ -565,16 +547,13 @@ export default function AzkarApp() {
                   </span>
                   {isDone && <span style={{ fontSize:13,color:"#22c55e",fontWeight:700 }}>✓ مكتمل</span>}
                 </div>
-
                 <p style={{ fontSize:f.zikr,fontWeight:700,lineHeight:2,color:clr.txt,marginBottom:11,whiteSpace:"pre-line" }}>
                   {z.text}
                 </p>
-
                 <p style={{ fontSize:f.fadl,color:clr.sub,lineHeight:1.75,marginBottom:14,paddingRight:10,borderRight:`2px solid ${clr.gold}44` }}>
                   {z.fadl}
                   <span style={{ display:"block",fontSize:f.src,marginTop:2,opacity:.65 }}>{z.source}</span>
                 </p>
-
                 <div style={{ display:"flex",gap:10 }}>
                   <button
                     onClick={() => handleCount(z.id, z.count)}
@@ -618,8 +597,6 @@ export default function AzkarApp() {
         )}
       </main>
 
-
-      {/* ── دليل التثبيت اليدوي ── */}
       {showInstallGuide && (
         <div style={{
           position:"fixed",inset:0,zIndex:200,
@@ -679,25 +656,18 @@ export default function AzkarApp() {
         </div>
       )}
 
-      {/* ── بانر الإعلان — يظهر بعد 20 ثانية ── */}
       {showAd && (
         <div style={{
           position:"fixed",bottom:0,left:0,right:0,zIndex:100,
           display:"flex",flexDirection:"column",alignItems:"center",
         }}>
-          {/* زر الإغلاق */}
-          <button
-            onClick={() => setShowAd(false)}
-            style={{
-              alignSelf:"flex-end",marginBottom:2,marginLeft:8,marginRight:8,
-              width:24,height:24,borderRadius:"50%",
-              background:"rgba(0,0,0,0.5)",color:"#fff",
-              fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",
-              cursor:"pointer",border:"none",lineHeight:1,
-            }}
-          >✕</button>
-
-          {/* ضع كود الإعلان هنا */}
+          <button onClick={() => setShowAd(false)} style={{
+            alignSelf:"flex-end",marginBottom:2,marginLeft:8,marginRight:8,
+            width:24,height:24,borderRadius:"50%",
+            background:"rgba(0,0,0,0.5)",color:"#fff",
+            fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",
+            cursor:"pointer",border:"none",lineHeight:1,
+          }}>✕</button>
           <div style={{
             width:"100%",maxWidth:520,minHeight:60,
             background: dark ? "#1a1d27" : "#fff",
@@ -706,11 +676,11 @@ export default function AzkarApp() {
             padding:"8px 16px",
           }}>
             {/* === كود الإعلان === */}
-
             {/* === نهاية كود الإعلان === */}
           </div>
         </div>
       )}
+
       <footer style={{
         position:"fixed",bottom: showAd ? 76 : 0,left:0,right:0,
         background:clr.card,borderTop:`1px solid ${clr.border}`,
