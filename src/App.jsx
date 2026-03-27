@@ -184,7 +184,7 @@ const AZKAR_DB = {
       id: "e5",
       text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
       fadl: "من أذكار المساء الثابتة عن النبي ﷺ",
-      source: "رواه muslim",
+      source: "رواه مسلم",
       count: 1,
     },
     {
@@ -363,27 +363,49 @@ export default function AzkarApp() {
   const [fs, setFs] = useState("md");
   const [cat, setCat] = useState("صباح");
   const [showAd, setShowAd] = useState(false);
-  // ── منطق زر التثبيت ──
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallGuide, setShowInstallGuide] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowAd(true), 20000);
-    
-    // لقط حدث "جاهز للتثبيت"
-    window.addEventListener('beforeinstallprompt', (e) => {
+
+    // كشف iOS
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    setIsIOS(ios);
+
+    // كشف إذا التطبيق مثبّت مسبقاً
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+
+    // لقط حدث التثبيت (Android/Chrome)
+    const handlePrompt = (e) => {
       e.preventDefault();
       setInstallPrompt(e);
-    });
+    };
+    window.addEventListener('beforeinstallprompt', handlePrompt);
 
-    return () => clearTimeout(timer);
+    const handleInstalled = () => setIsInstalled(true);
+    window.addEventListener('appinstalled', handleInstalled);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('beforeinstallprompt', handlePrompt);
+      window.removeEventListener('appinstalled', handleInstalled);
+    };
   }, []);
 
-  const handleInstallClick = () => {
-    if (!installPrompt) return;
-    installPrompt.prompt();
-    installPrompt.userChoice.then((choice) => {
-      if (choice.outcome === 'accepted') setInstallPrompt(null);
-    });
+  const handleInstall = () => {
+    if (installPrompt) {
+      installPrompt.prompt();
+      installPrompt.userChoice.then((c) => {
+        if (c.outcome === 'accepted') { setInstallPrompt(null); setIsInstalled(true); }
+      });
+    } else {
+      setShowInstallGuide(true);
+    }
   };
 
   const azkar = useMemo(() => AZKAR_DB[cat], [cat]);
@@ -402,17 +424,16 @@ export default function AzkarApp() {
     }
   }, []);
 
-  const d = dark;
   const clr = {
-    bg: d ? "#0d1117" : "#f7f3ec",
-    card: d ? "#161b24" : "#fff",
-    border: d ? "#21262d" : "#e8e2d8",
-    txt: d ? "#e6dfd0" : "#1c1710",
-    sub: d ? "#6e6558" : "#9a8a6a",
-    gold: d ? "#c9a84c" : "#8b6210",
-    goldTxt: d ? "#0d1117" : "#fff",
-    pgBg: d ? "#21262d" : "#e8e2d8",
-    greenBg: d ? "#0a1f10" : "#f0fff4",
+    bg: dark ? "#0d1117" : "#f7f3ec",
+    card: dark ? "#161b24" : "#fff",
+    border: dark ? "#21262d" : "#e8e2d8",
+    txt: dark ? "#e6dfd0" : "#1c1710",
+    sub: dark ? "#6e6558" : "#9a8a6a",
+    gold: dark ? "#c9a84c" : "#8b6210",
+    goldTxt: dark ? "#0d1117" : "#fff",
+    pgBg: dark ? "#21262d" : "#e8e2d8",
+    greenBg: dark ? "#0a1f10" : "#f0fff4",
     greenBdr: "#22c55e55",
   };
 
@@ -442,15 +463,14 @@ export default function AzkarApp() {
             </div>
           </div>
           <div style={{ display:"flex",gap:8,alignItems:"center" }}>
-            {/* زر تثبيت التطبيق يظهر فقط عند توفر الميزة */}
-            {installPrompt && (
-              <button onClick={handleInstallClick} style={{
-                background: clr.gold, color: clr.goldTxt,
-                padding: "6px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-                display: "flex", alignItems: "center", gap: 5, animation: "up .3s ease"
-              }}>
-                <span>ثبت التطبيق</span> 📱
-              </button>
+            {/* زر تثبيت التطبيق */}
+            {!isInstalled && (
+              <button onClick={handleInstall} title="أضف للشاشة الرئيسية" style={{
+                width:36,height:36,borderRadius:10,border:`1px solid ${clr.gold}`,
+                background:"transparent",fontSize:18,
+                display:"flex",alignItems:"center",justifyContent:"center",
+                color:clr.gold,transition:"all .2s",
+              }}>📲</button>
             )}
             <div style={{ display:"flex",borderRadius:10,overflow:"hidden",border:`1px solid ${clr.border}` }}>
               {["sm","md","lg"].map(s => (
@@ -464,11 +484,11 @@ export default function AzkarApp() {
                 </button>
               ))}
             </div>
-            <button onClick={() => setDark(!d)} style={{
+            <button onClick={() => setDark(!dark)} style={{
               width:36,height:36,borderRadius:10,border:`1px solid ${clr.border}`,
               fontSize:18,display:"flex",alignItems:"center",justifyContent:"center",
             }}>
-              {d ? "☀️" : "🌙"}
+              {dark ? "☀️" : "🌙"}
             </button>
           </div>
         </div>
@@ -519,7 +539,7 @@ export default function AzkarApp() {
                 <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10 }}>
                   <span style={{
                     fontSize:11,padding:"3px 10px",borderRadius:20,
-                    background: d ? "#21262d" : "#f0ead8",color:clr.sub,
+                    background: dark ? "#21262d" : "#f0ead8",color:clr.sub,
                   }}>
                     {cat} · {z.count === 1 ? "مرة" : `${z.count}×`}
                   </span>
@@ -579,6 +599,66 @@ export default function AzkarApp() {
       </main>
 
 
+      {/* ── دليل التثبيت اليدوي ── */}
+      {showInstallGuide && (
+        <div style={{
+          position:"fixed",inset:0,zIndex:200,
+          background:"rgba(0,0,0,0.6)",backdropFilter:"blur(4px)",
+          display:"flex",alignItems:"flex-end",justifyContent:"center",
+        }} onClick={() => setShowInstallGuide(false)}>
+          <div onClick={e => e.stopPropagation()} style={{
+            width:"100%",maxWidth:520,borderRadius:"20px 20px 0 0",
+            background:clr.card,padding:"24px 20px 36px",
+          }}>
+            <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20 }}>
+              <span style={{ fontWeight:700,fontSize:17,color:clr.txt }}>📲 أضف للشاشة الرئيسية</span>
+              <button onClick={() => setShowInstallGuide(false)} style={{
+                width:28,height:28,borderRadius:"50%",
+                background:clr.pgBg,color:clr.sub,fontSize:16,
+                display:"flex",alignItems:"center",justifyContent:"center",
+              }}>✕</button>
+            </div>
+            {isIOS ? (
+              <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
+                {[
+                  { n:"1", t:"افتح الموقع في متصفح Safari", i:"🧭" },
+                  { n:"2", t:'اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"', i:"⬆️" },
+                  { n:"3", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+                ].map(s => (
+                  <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
+                    <span style={{
+                      width:32,height:32,borderRadius:"50%",
+                      background:clr.gold,color:clr.goldTxt,
+                      display:"flex",alignItems:"center",justifyContent:"center",
+                      fontWeight:700,fontSize:14,flexShrink:0,
+                    }}>{s.n}</span>
+                    <span style={{ fontSize:14,color:clr.txt,lineHeight:1.6 }}>{s.i} {s.t}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
+                {[
+                  { n:"1", t:"افتح الموقع في متصفح Chrome", i:"🌐" },
+                  { n:"2", t:'اضغط على قائمة ⋮ ثم "إضافة إلى الشاشة الرئيسية"', i:"⋮" },
+                  { n:"3", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+                ].map(s => (
+                  <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
+                    <span style={{
+                      width:32,height:32,borderRadius:"50%",
+                      background:clr.gold,color:clr.goldTxt,
+                      display:"flex",alignItems:"center",justifyContent:"center",
+                      fontWeight:700,fontSize:14,flexShrink:0,
+                    }}>{s.n}</span>
+                    <span style={{ fontSize:14,color:clr.txt,lineHeight:1.6 }}>{s.i} {s.t}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ── بانر الإعلان — يظهر بعد 20 ثانية ── */}
       {showAd && (
         <div style={{
@@ -612,12 +692,13 @@ export default function AzkarApp() {
         </div>
       )}
       <footer style={{
-        position:"fixed",bottom:0,left:0,right:0,
+        position:"fixed",bottom: showAd ? 76 : 0,left:0,right:0,
         background:clr.card,borderTop:`1px solid ${clr.border}`,
         padding:"8px 16px",textAlign:"center",
+        transition:"bottom .3s ease",zIndex:99,
       }}>
         <p style={{ fontSize:12,color:clr.sub }}>
-          {allDone ? `✓    اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
+          {allDone ? `✓ اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
         </p>
       </footer>
     </div>
