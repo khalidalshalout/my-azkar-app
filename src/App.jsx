@@ -375,10 +375,11 @@ export default function AzkarApp() {
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     setIsIOS(ios);
 
-    // كشف إذا التطبيق مثبّت مسبقاً
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-    }
+    // إخفاء الزر إذا الموقع مفتوح أصلاً كـ PWA مثبّت
+    const mq = window.matchMedia('(display-mode: standalone)');
+    if (mq.matches) setIsInstalled(true);
+    const mqHandler = (e) => { if (e.matches) setIsInstalled(true); };
+    mq.addEventListener('change', mqHandler);
 
     // لقط حدث التثبيت (Android/Chrome)
     const handlePrompt = (e) => {
@@ -394,6 +395,7 @@ export default function AzkarApp() {
       clearTimeout(timer);
       window.removeEventListener('beforeinstallprompt', handlePrompt);
       window.removeEventListener('appinstalled', handleInstalled);
+      mq.removeEventListener('change', mqHandler);
     };
   }, []);
 
@@ -463,15 +465,6 @@ export default function AzkarApp() {
             </div>
           </div>
           <div style={{ display:"flex",gap:8,alignItems:"center" }}>
-            {/* زر تثبيت التطبيق */}
-            {!isInstalled && (
-              <button onClick={handleInstall} title="أضف للشاشة الرئيسية" style={{
-                width:36,height:36,borderRadius:10,border:`1px solid ${clr.gold}`,
-                background:"transparent",fontSize:18,
-                display:"flex",alignItems:"center",justifyContent:"center",
-                color:clr.gold,transition:"all .2s",
-              }}>📲</button>
-            )}
             <div style={{ display:"flex",borderRadius:10,overflow:"hidden",border:`1px solid ${clr.border}` }}>
               {["sm","md","lg"].map(s => (
                 <button key={s} onClick={() => setFs(s)} style={{
@@ -497,8 +490,27 @@ export default function AzkarApp() {
         </div>
       </header>
 
+      {/* ── بانر التثبيت — يظهر دائماً ما لم يكن التطبيق مثبتاً ── */}
+      {!isInstalled && (
+        <div style={{
+          maxWidth:520,margin:"0 auto",padding:"8px 16px 0",
+        }}>
+          <button onClick={handleInstall} style={{
+            width:"100%",padding:"10px 16px",borderRadius:12,
+            background:`${clr.gold}18`,border:`1px solid ${clr.gold}55`,
+            display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+            fontFamily:"inherit",cursor:"pointer",transition:"all .2s",
+          }}>
+            <span style={{ fontSize:18 }}>📲</span>
+            <span style={{ fontSize:13,fontWeight:700,color:clr.gold }}>
+              أضف التطبيق لشاشتك الرئيسية
+            </span>
+          </button>
+        </div>
+      )}
+
       {/* Tabs */}
-      <div style={{ maxWidth:520,margin:"0 auto",padding:"14px 16px 6px",display:"flex",gap:8 }}>
+      <div style={{ maxWidth:520,margin:"0 auto",padding:"10px 16px 6px",display:"flex",gap:8 }}>
         {["صباح","مساء"].map(c => (
           <button key={c} onClick={() => setCat(c)} style={{
             padding:"7px 20px",borderRadius:20,fontSize:14,fontWeight:600,fontFamily:"inherit",
@@ -698,7 +710,7 @@ export default function AzkarApp() {
         transition:"bottom .3s ease",zIndex:99,
       }}>
         <p style={{ fontSize:12,color:clr.sub }}>
-          {allDone ? `✓ اكتملت  أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
+          {allDone ? `✓ اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
         </p>
       </footer>
     </div>
