@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useCallback, useMemo, useEffect } from "react";
+=======
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+>>>>>>> new version
 
 // ─── قاعدة بيانات الأذكار الكاملة من السنة النبوية ──────────────────────────
 const AZKAR_DB = {
@@ -490,7 +494,11 @@ export default function AzkarApp() {
         </div>
       </header>
 
+<<<<<<< HEAD
       {/* ── بانر التثبيت — يظهر.   دائماً ما لم يكن التطبيق مثبتاً ── */}
+=======
+      {/* ── بانر التثبيت — يظهر دائماً ما لم يكن التطبيق مثبتاً ── */}
+>>>>>>> new version
       {!isInstalled && (
         <div style={{
           maxWidth:520,margin:"0 auto",padding:"8px 16px 0",
