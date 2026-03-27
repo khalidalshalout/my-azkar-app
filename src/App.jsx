@@ -698,7 +698,7 @@ export default function AzkarApp() {
         transition:"bottom .3s ease",zIndex:99,
       }}>
         <p style={{ fontSize:12,color:clr.sub }}>
-          {allDone ? `✓ اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
+          {allDone ? `✓ اكتملت  أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
         </p>
       </footer>
     </div>
