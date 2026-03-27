@@ -490,7 +490,7 @@ export default function AzkarApp() {
         </div>
       </header>
 
-      {/* ── بانر التثبيت — يظهر دائماً ما لم يكن التطبيق مثبتاً ── */}
+      {/* ── بانر التثبيت — يظهر.   دائماً ما لم يكن التطبيق مثبتاً ── */}
       {!isInstalled && (
         <div style={{
           maxWidth:520,margin:"0 auto",padding:"8px 16px 0",
