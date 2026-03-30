@@ -633,9 +633,9 @@ export default function AzkarApp() {
             {isIOS ? (
               <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
                 {[
-                  { n:"1", t:"افتح الموقع في متصفح Safari", i:"🧭" },
-                  { n:"2", t:'اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"', i:"⬆️" },
-                  { n:"3", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+                //  { n:"1", t:"افتح الموقع في متصفح Safari", i:"🧭" },
+                  { n:"1", t:'اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"', i:"⬆️" },
+                  { n:"2", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
                 ].map(s => (
                   <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
                     <span style={{
@@ -651,9 +651,8 @@ export default function AzkarApp() {
             ) : (
               <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
                 {[
-                  { n:"1", t:"افتح الموقع في متصفح Chrome", i:"🌐" },
-                  { n:"2", t:'اضغط على قائمة ⋮ ثم "إضافة إلى الشاشة الرئيسية"', i:"⋮" },
-                  { n:"3", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+              //    { n:"1", t:"افتح الموقع في متصفح Chrome", i:"🌐" },
+{ n:"1", t:'اضغط على الثلاث نقاط في أعلى الشاشة ⋮ ثم "إضافة إلى الشاشة الرئيسية"', i:"⋮" },                  { n:"2", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
                 ].map(s => (
                   <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
                     <span style={{
