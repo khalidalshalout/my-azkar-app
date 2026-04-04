@@ -433,7 +433,7 @@ export default function AzkarApp() {
   const pct = azkar.length ? (done / azkar.length) * 100 : 0;
 
   const share = useCallback(async (z) => {
-    const text = `${z.text}\n\n${z.fadl}\n${z.source}`;
+    const text = `${z.text}\n\n${z.fadl}\n${z.source}\n\n─────────────────\nعبر موقع أذكاري 📿\nhttps://athkar.kunooz.co/`;
     if (navigator.share) {
       try { await navigator.share({ title: "ذكر", text }); } catch {}
     } else {
