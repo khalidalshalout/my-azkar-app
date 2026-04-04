@@ -597,19 +597,39 @@ export default function AzkarApp() {
         })}
 
         {allDone && (
-          <div className="up" style={{
-            textAlign:"center",padding:"36px 20px",borderRadius:18,
-            border:clr.greenBdr,background:clr.greenBg,
-          }}>
-            <div style={{ fontSize:52,marginBottom:10 }}>🎉</div>
-            <p style={{ fontSize:20,fontWeight:700,color:"#22c55e",marginBottom:6 }}>أحسنت! اكتملت أذكار {cat}</p>
-            <p style={{ fontSize:13,color:clr.sub,marginBottom:20 }}>تقبّل الله منك</p>
-            <button onClick={() => reset(azkar)} style={{
-              padding:"10px 28px",borderRadius:14,background:clr.gold,color:clr.goldTxt,
-              fontFamily:"inherit",fontWeight:700,fontSize:14,
-            }}>البدء من جديد</button>
-          </div>
-        )}
+  <div className="up" style={{
+    textAlign:"center",padding:"36px 20px",borderRadius:18,
+    border:clr.greenBdr,background:clr.greenBg,
+  }}>
+    <div style={{ fontSize:52,marginBottom:10 }}>🎉</div>
+    <p style={{ fontSize:20,fontWeight:700,color:"#22c55e",marginBottom:6 }}>أحسنت! اكتملت أذكار {cat}</p>
+    <p style={{ fontSize:13,color:clr.sub,marginBottom:20 }}>تقبّل الله منك</p>
+    <div style={{ display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap" }}>
+      <button onClick={() => reset(azkar)} style={{
+        padding:"10px 28px",borderRadius:14,background:clr.gold,color:clr.goldTxt,
+        fontFamily:"inherit",fontWeight:700,fontSize:14,
+      }}>البدء من جديد</button>
+      <button onClick={async () => {
+        const text = `أكملت أذكار ${cat} اليوم 🤲\nشاركنا أذكارك على موقع أذكاري:\nhttps://athkar.kunooz.co/`;
+        if (navigator.share) {
+          try { await navigator.share({ title:"أذكاري", text }); } catch {}
+        } else {
+          await navigator.clipboard.writeText(text);
+          alert("تم النسخ!");
+        }
+      }} style={{
+        padding:"10px 28px",borderRadius:14,
+        background:"transparent",
+        border:`1px solid ${clr.gold}`,
+        color:clr.gold,
+        fontFamily:"inherit",fontWeight:700,fontSize:14,
+        display:"flex",alignItems:"center",gap:6,
+      }}>
+        <span>📤</span> شارك الموقع
+      </button>
+    </div>
+  </div>
+)}
       </main>
 
       {showInstallGuide && (
