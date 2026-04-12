@@ -1,8 +1,22 @@
-
 import React, { useState, useCallback, useMemo, useEffect } from "react";
+
 // ─── قاعدة بيانات الأذكار الكاملة من السنة النبوية ──────────────────────────
 const AZKAR_DB = {
   صباح: [
+    {
+      id: "s0a",
+      text: "أَعُوذُ بِاللهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+      fadl: "من قالها ثلاث مرات حين يصبح أُجير من الشيطان حتى يمسي",
+      source: "رواه أبو داود والترمذي",
+      count: 3,
+    },
+    {
+      id: "s0b",
+      text: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ",
+      fadl: "من أذكار الصباح الثابتة عن النبي ﷺ",
+      source: "متفق عليه",
+      count: 1,
+    },
     {
       id: "s1",
       text: "اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
@@ -152,6 +166,20 @@ const AZKAR_DB = {
     },
   ],
   مساء: [
+    {
+      id: "e0a",
+      text: "أَعُوذُ بِاللهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+      fadl: "من قالها ثلاث مرات حين يمسي أُجير من الشيطان حتى يصبح",
+      source: "رواه أبو داود والترمذي",
+      count: 3,
+    },
+    {
+      id: "e0b",
+      text: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ",
+      fadl: "من أذكار المساء الثابتة عن النبي ﷺ",
+      source: "متفق عليه",
+      count: 1,
+    },
     {
       id: "e1",
       text: "اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
@@ -313,32 +341,46 @@ const AZKAR_DB = {
       source: "رواه البخاري",
       count: 1,
     },
-  ],نوم: [
-
-    { id:"n1", text:"اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", fadl:"من قرأها عند النوم لم يقربه شيطان حتى يصبح", source:"رواه البخاري", count:1 },
-    { id:"n2", text:"آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ", fadl:"من قرأ الآيتين الأخيرتين من سورة البقرة في ليلة كفتاه", source:"متفق عليه", count:1 },
-    { id:"n3", text:"بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ﴾", fadl:"من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source:"رواه البخاري", count:3 },
-    { id:"n4", text:"بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾", fadl:"من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source:"رواه البخاري", count:3 },
-    { id:"n5", text:"بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ﴾", fadl:"من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source:"رواه البخاري", count:3 },
-        { id:"n6", text:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", fadl:"كان النبي ﷺ يقولها إذا أراد أن ينام", source:"رواه البخاري", count:1 },
-    { id:"n7", text:"اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ", fadl:"كان النبي ﷺ يقولها ثلاث مرات عند النوم", source:"رواه أبو داود والترمذي", count:3 },
-    { id:"n8", text:"سُبْحَانَ اللهِ", fadl:"من تسبيح النوم المأثور — ثلاث وثلاثون", source:"متفق عليه", count:33 },
-    { id:"n9", text:"الْحَمْدُ لِلَّهِ", fadl:"من تسبيح النوم المأثور — ثلاث وثلاثون", source:"متفق عليه", count:33 },
-    { id:"n10", text:"اللهُ أَكْبَرُ", fadl:"من تسبيح النوم المأثور — أربع وثلاثون", source:"متفق عليه", count:34 },
-    { id:"n11", text:"اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِيَ إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لَا مَلْجَأَ وَلَا مَنْجَا مِنْكَ إِلَّا إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ", fadl:"من قالها فمات من ليلته مات على الفطرة", source:"متفق عليه", count:1 },
-    { id:"n12", text:"اللَّهُمَّ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ", fadl:"من أذكار النوم الثابتة عن النبي ﷺ", source:"رواه مسلم", count:1 },
+  ],
+  نوم: [
+    {
+      id: "n0a",
+      text: "أَعُوذُ بِاللهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+      fadl: "من أذكار النوم الثابتة عن النبي ﷺ",
+      source: "رواه أبو داود والترمذي",
+      count: 3,
+    },
+    {
+      id: "n0b",
+      text: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ",
+      fadl: "من أذكار النوم الثابتة عن النبي ﷺ",
+      source: "متفق عليه",
+      count: 1,
+    },
+    { id: "n1", text: "اللهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", fadl: "من قرأها عند النوم لم يقربه شيطان حتى يصبح", source: "رواه البخاري", count: 1 },
+    { id: "n2", text: "آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ", fadl: "من قرأ الآيتين الأخيرتين من سورة البقرة في ليلة كفتاه", source: "متفق عليه", count: 1 },
+    { id: "n3", text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ﴾", fadl: "من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source: "رواه البخاري", count: 3 },
+    { id: "n4", text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾", fadl: "من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source: "رواه البخاري", count: 3 },
+    { id: "n5", text: "بِسْمِ اللهِ الرَّحْمنِ الرَّحِيمِ\n﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ﴾", fadl: "من قرأ المعوذتين والإخلاص عند النوم كفتاه من كل شيء", source: "رواه البخاري", count: 3 },
+    { id: "n6", text: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", fadl: "كان النبي ﷺ يقولها إذا أراد أن ينام", source: "رواه البخاري", count: 1 },
+    { id: "n7", text: "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ", fadl: "كان النبي ﷺ يقولها ثلاث مرات عند النوم", source: "رواه أبو داود والترمذي", count: 3 },
+    { id: "n8", text: "سُبْحَانَ اللهِ", fadl: "من تسبيح النوم المأثور — ثلاث وثلاثون", source: "متفق عليه", count: 33 },
+    { id: "n9", text: "الْحَمْدُ لِلَّهِ", fadl: "من تسبيح النوم المأثور — ثلاث وثلاثون", source: "متفق عليه", count: 33 },
+    { id: "n10", text: "اللهُ أَكْبَرُ", fadl: "من تسبيح النوم المأثور — أربع وثلاثون", source: "متفق عليه", count: 34 },
+    { id: "n11", text: "اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِيَ إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لَا مَلْجَأَ وَلَا مَنْجَا مِنْكَ إِلَّا إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ", fadl: "من قالها فمات من ليلته مات على الفطرة", source: "متفق عليه", count: 1 },
+    { id: "n12", text: "اللَّهُمَّ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ", fadl: "من أذكار النوم الثابتة عن النبي ﷺ", source: "رواه مسلم", count: 1 },
   ],
 };
+
 const CAT_CONFIG = {
-  صباح: { emoji: "🌅", label: "الصباح" },
-  مساء: { emoji: "🌙", label: "المساء" },
-  نوم:  { emoji: "⭐", label: "النوم"  },
+  صباح: { emoji: "🌅", label: "أذكار الصباح" },
+  مساء: { emoji: "🌙", label: "أذكار المساء" },
+  نوم:  { emoji: "⭐", label: "أذكار النوم"  },
 };
-const FS = {
-  sm: { zikr: 17, fadl: 11, src: 10, num: 34 },
-  md: { zikr: 20, fadl: 13, src: 11, num: 42 },
-  lg: { zikr: 23, fadl: 15, src: 12, num: 50 },
-};
+
+// حجم الخط — 6 مستويات (يمكن الزيادة أو التصغير بحرية)
+const FONT_SIZES = [13, 16, 19, 23, 27, 32];
+const DEFAULT_FS_INDEX = Math.floor(FONT_SIZES.length / 2); // الحجم الأوسط
 
 function useAzkarState(azkar) {
   const [counters, setCounters] = useState(() =>
@@ -378,7 +420,7 @@ function useAzkarState(azkar) {
 
 export default function AzkarApp() {
   const [dark, setDark] = useState(false);
-  const [fs, setFs] = useState("md");
+  const [fsIndex, setFsIndex] = useState(DEFAULT_FS_INDEX);
   const [cat, setCat] = useState("صباح");
   const [showAd, setShowAd] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -386,31 +428,33 @@ export default function AzkarApp() {
   const [isIOS, setIsIOS] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
+  // زيادة حجم الخط
+  const increaseFontSize = useCallback(() => {
+    setFsIndex((prev) => Math.min(prev + 1, FONT_SIZES.length - 1));
+  }, []);
+
+  // تصغير حجم الخط
+  const decreaseFontSize = useCallback(() => {
+    setFsIndex((prev) => Math.max(prev - 1, 0));
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => setShowAd(true), 20000);
-
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     setIsIOS(ios);
-
-    const mq = window.matchMedia('(display-mode: standalone)');
+    const mq = window.matchMedia("(display-mode: standalone)");
     if (mq.matches) setIsInstalled(true);
     const mqHandler = (e) => { if (e.matches) setIsInstalled(true); };
-    mq.addEventListener('change', mqHandler);
-
-    const handlePrompt = (e) => {
-      e.preventDefault();
-      setInstallPrompt(e);
-    };
-    window.addEventListener('beforeinstallprompt', handlePrompt);
-
+    mq.addEventListener("change", mqHandler);
+    const handlePrompt = (e) => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener("beforeinstallprompt", handlePrompt);
     const handleInstalled = () => setIsInstalled(true);
-    window.addEventListener('appinstalled', handleInstalled);
-
+    window.addEventListener("appinstalled", handleInstalled);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('beforeinstallprompt', handlePrompt);
-      window.removeEventListener('appinstalled', handleInstalled);
-      mq.removeEventListener('change', mqHandler);
+      window.removeEventListener("beforeinstallprompt", handlePrompt);
+      window.removeEventListener("appinstalled", handleInstalled);
+      mq.removeEventListener("change", mqHandler);
     };
   }, []);
 
@@ -418,7 +462,7 @@ export default function AzkarApp() {
     if (installPrompt) {
       installPrompt.prompt();
       installPrompt.userChoice.then((c) => {
-        if (c.outcome === 'accepted') { setInstallPrompt(null); setIsInstalled(true); }
+        if (c.outcome === "accepted") { setInstallPrompt(null); setIsInstalled(true); }
       });
     } else {
       setShowInstallGuide(true);
@@ -431,6 +475,12 @@ export default function AzkarApp() {
   const done = useMemo(() => azkar.filter((z) => completed[z.id]).length, [azkar, completed]);
   const allDone = done === azkar.length;
   const pct = azkar.length ? (done / azkar.length) * 100 : 0;
+
+  // الحجم الحالي للنص
+  const currentFontSize = FONT_SIZES[fsIndex];
+  const fadlFontSize = Math.max(currentFontSize - 6, 10);
+  const srcFontSize = Math.max(currentFontSize - 7, 9);
+  const numFontSize = Math.max(currentFontSize + 10, 24);
 
   const share = useCallback(async (z) => {
     const text = `${z.text}\n\n${z.fadl}\n${z.source}\n\n─────────────────\nعبر موقع أذكاري 📿\nhttps://athkar.kunooz.co/`;
@@ -454,6 +504,8 @@ export default function AzkarApp() {
     greenBdr: "#22c55e55",
   };
 
+  const catConfig = CAT_CONFIG[cat];
+
   return (
     <div dir="rtl" style={{ minHeight: "100vh", background: clr.bg, fontFamily: "'Cairo',sans-serif", transition: "background .4s" }}>
       <style>{`
@@ -467,129 +519,187 @@ export default function AzkarApp() {
         .bar{transition:width .4s ease}
         ::-webkit-scrollbar{width:3px}
         ::-webkit-scrollbar-thumb{background:#c9a84c33;border-radius:2px}
+        .fs-btn{
+          display:flex;align-items:center;justify-content:center;
+          border-radius:10px;border:1px solid;
+          transition:all .2s;
+          font-family:'Cairo',sans-serif;
+          font-weight:700;
+          cursor:pointer;
+          user-select:none;
+        }
+        .fs-btn:active{transform:scale(0.92);}
       `}</style>
 
-      <header style={{ position:"sticky",top:0,zIndex:50,background:clr.card,borderBottom:`1px solid ${clr.border}` }}>
-        <div style={{ maxWidth:520,margin:"0 auto",padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between" }}>
-          <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-            <span style={{ fontSize:26 }}>{cat === "صباح" ? "🌅" : "🌙"}</span>
+      {/* ─── Header ─── */}
+      <header style={{ position: "sticky", top: 0, zIndex: 50, background: clr.card, borderBottom: `1px solid ${clr.border}` }}>
+        <div style={{ maxWidth: 520, margin: "0 auto", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          {/* العنوان — اسم التصنيف الحالي */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 26 }}>{catConfig.emoji}</span>
             <div>
-              <div style={{ fontWeight:700,fontSize:17,color:clr.txt }}>أذكاري</div>
-              <div style={{ fontSize:11,color:clr.sub }}>{done}/{azkar.length} مكتمل</div>
+              <div style={{ fontWeight: 700, fontSize: 17, color: clr.txt }}>{catConfig.label}</div>
+              <div style={{ fontSize: 11, color: clr.sub }}>{done}/{azkar.length} مكتمل</div>
             </div>
           </div>
-          <div style={{ display:"flex",gap:8,alignItems:"center" }}>
-            <div style={{ display:"flex",borderRadius:10,overflow:"hidden",border:`1px solid ${clr.border}` }}>
-              {["sm","md","lg"].map(s => (
-                <button key={s} onClick={() => setFs(s)} style={{
-                  padding:"4px 9px",fontSize:12,fontFamily:"inherit",
-                  background: fs===s ? clr.gold : "transparent",
-                  color: fs===s ? clr.goldTxt : clr.sub,
-                  transition:"all .2s",
-                }}>
-                  {s==="sm"?"ص":s==="md"?"و":"ك"}
-                </button>
-              ))}
-            </div>
+
+          {/* أزرار التحكم */}
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            {/* زر تصغير حجم الخط */}
+            <button
+              className="fs-btn"
+              onClick={decreaseFontSize}
+              disabled={fsIndex === 0}
+              style={{
+                width: 40, height: 40,
+                fontSize: 14,
+                borderColor: fsIndex === 0 ? clr.pgBg : clr.border,
+                color: fsIndex === 0 ? clr.pgBg : clr.sub,
+                background: "transparent",
+                opacity: fsIndex === 0 ? 0.4 : 1,
+              }}
+              title="تصغير الخط"
+            >
+              ض
+            </button>
+
+            {/* زر تكبير حجم الخط */}
+            <button
+              className="fs-btn"
+              onClick={increaseFontSize}
+              disabled={fsIndex === FONT_SIZES.length - 1}
+              style={{
+                width: 40, height: 40,
+                fontSize: 22,
+                borderColor: fsIndex === FONT_SIZES.length - 1 ? clr.pgBg : clr.border,
+                color: fsIndex === FONT_SIZES.length - 1 ? clr.pgBg : clr.sub,
+                background: "transparent",
+                opacity: fsIndex === FONT_SIZES.length - 1 ? 0.4 : 1,
+              }}
+              title="تكبير الخط"
+            >
+              ض
+            </button>
+
+            {/* زر الوضع الليلي */}
             <button onClick={() => setDark(!dark)} style={{
-              width:36,height:36,borderRadius:10,border:`1px solid ${clr.border}`,
-              fontSize:18,display:"flex",alignItems:"center",justifyContent:"center",
+              width: 36, height: 36, borderRadius: 10, border: `1px solid ${clr.border}`,
+              fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center",
             }}>
               {dark ? "☀️" : "🌙"}
             </button>
           </div>
         </div>
-        <div style={{ height:3,background:clr.pgBg }}>
-          <div className="bar" style={{ height:"100%",width:`${pct}%`,background:allDone?"#22c55e":clr.gold,borderRadius:"0 2px 2px 0" }} />
+
+        {/* شريط التقدم */}
+        <div style={{ height: 3, background: clr.pgBg }}>
+          <div className="bar" style={{ height: "100%", width: `${pct}%`, background: allDone ? "#22c55e" : clr.gold, borderRadius: "0 2px 2px 0" }} />
         </div>
       </header>
 
+      {/* زر التثبيت */}
       {!isInstalled && (
-        <div style={{ maxWidth:520,margin:"0 auto",padding:"8px 16px 0" }}>
+        <div style={{ maxWidth: 520, margin: "0 auto", padding: "8px 16px 0" }}>
           <button onClick={handleInstall} style={{
-            width:"100%",padding:"10px 16px",borderRadius:12,
-            background:`${clr.gold}18`,border:`1px solid ${clr.gold}55`,
-            display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-            fontFamily:"inherit",cursor:"pointer",transition:"all .2s",
+            width: "100%", padding: "10px 16px", borderRadius: 12,
+            background: `${clr.gold}18`, border: `1px solid ${clr.gold}55`,
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            fontFamily: "inherit", cursor: "pointer", transition: "all .2s",
           }}>
-            <span style={{ fontSize:18 }}>📲</span>
-            <span style={{ fontSize:13,fontWeight:700,color:clr.gold }}>أضف التطبيق لشاشتك الرئيسية</span>
+            <span style={{ fontSize: 18 }}>📲</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: clr.gold }}>أضف التطبيق لشاشتك الرئيسية</span>
           </button>
         </div>
       )}
 
-      <div style={{ maxWidth:520,margin:"0 auto",padding:"10px 16px 6px",display:"flex",gap:8 }}>
-{Object.entries(CAT_CONFIG).map(([c, cfg]) => (          <button key={c} onClick={() => setCat(c)} style={{
-            padding:"7px 20px",borderRadius:20,fontSize:14,fontWeight:600,fontFamily:"inherit",
-            background: cat===c ? clr.gold : clr.card,
-            color: cat===c ? clr.goldTxt : clr.sub,
-            border:`1px solid ${cat===c ? clr.gold : clr.border}`,
-            transition:"all .2s",
+      {/* أزرار التصنيفات */}
+      <div style={{ maxWidth: 520, margin: "0 auto", padding: "10px 16px 6px", display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {Object.entries(CAT_CONFIG).map(([c, cfg]) => (
+          <button key={c} onClick={() => setCat(c)} style={{
+            padding: "7px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, fontFamily: "inherit",
+            background: cat === c ? clr.gold : clr.card,
+            color: cat === c ? clr.goldTxt : clr.sub,
+            border: `1px solid ${cat === c ? clr.gold : clr.border}`,
+            transition: "all .2s",
           }}>
-{cfg.emoji} {cfg.label}          </button>
+            {cfg.emoji} {cfg.label}
+          </button>
         ))}
         <button onClick={() => reset(azkar)} style={{
-          marginRight:"auto",padding:"7px 16px",borderRadius:20,fontSize:13,fontFamily:"inherit",
-          color:clr.sub,border:`1px solid ${clr.border}`,transition:"all .2s",
+          marginRight: "auto", padding: "7px 16px", borderRadius: 20, fontSize: 13, fontFamily: "inherit",
+          color: clr.sub, border: `1px solid ${clr.border}`, transition: "all .2s",
         }}>↺ إعادة</button>
       </div>
 
-      <main style={{ maxWidth:520,margin:"0 auto",padding:"8px 16px 90px" }}>
+      {/* ─── البطاقات ─── */}
+      <main style={{ maxWidth: 520, margin: "0 auto", padding: "8px 16px 90px" }}>
         {azkar.map((z, i) => {
           const isDone = completed[z.id];
           const rem = counters[z.id] ?? z.count;
           const pg = ((z.count - rem) / z.count) * 100;
-          const f = FS[fs];
           return (
             <div key={z.id} className={`up ${shaking[z.id] ? "shake" : ""}`}
               style={{
-                marginBottom:14,borderRadius:18,overflow:"hidden",
-                border:`1px solid ${isDone ? clr.greenBdr : clr.border}`,
+                marginBottom: 14, borderRadius: 18, overflow: "hidden",
+                border: `1px solid ${isDone ? clr.greenBdr : clr.border}`,
                 background: isDone ? clr.greenBg : clr.card,
-                transition:"border-color .4s,background .4s",
-                animationDelay:`${i*45}ms`,
+                transition: "border-color .4s,background .4s",
+                animationDelay: `${i * 45}ms`,
               }}>
-              <div style={{ height:2,background:clr.pgBg }}>
-                <div className="bar" style={{ height:"100%",width:`${pg}%`,background:isDone?"#22c55e":clr.gold }} />
+              <div style={{ height: 2, background: clr.pgBg }}>
+                <div className="bar" style={{ height: "100%", width: `${pg}%`, background: isDone ? "#22c55e" : clr.gold }} />
               </div>
-              <div style={{ padding:"15px 17px" }}>
-                <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10 }}>
+              <div style={{ padding: "15px 17px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <span style={{
-                    fontSize:11,padding:"3px 10px",borderRadius:20,
-                    background: dark ? "#21262d" : "#f0ead8",color:clr.sub,
+                    fontSize: 11, padding: "3px 10px", borderRadius: 20,
+                    background: dark ? "#21262d" : "#f0ead8", color: clr.sub,
                   }}>
-                    {cat} · {z.count === 1 ? "مرة" : `${z.count}×`}
+                    {CAT_CONFIG[cat].label.replace("أذكار ", "")} · {z.count === 1 ? "مرة" : `${z.count}×`}
                   </span>
-                  {isDone && <span style={{ fontSize:13,color:"#22c55e",fontWeight:700 }}>✓ مكتمل</span>}
+                  {isDone && <span style={{ fontSize: 13, color: "#22c55e", fontWeight: 700 }}>✓ مكتمل</span>}
                 </div>
-                <p style={{ fontSize:f.zikr,fontWeight:700,lineHeight:2,color:clr.txt,marginBottom:11,whiteSpace:"pre-line" }}>
+                <p style={{ fontSize: currentFontSize, fontWeight: 700, lineHeight: 2, color: clr.txt, marginBottom: 11, whiteSpace: "pre-line" }}>
                   {z.text}
                 </p>
-                <p style={{ fontSize:f.fadl,color:clr.sub,lineHeight:1.75,marginBottom:14,paddingRight:10,borderRight:`2px solid ${clr.gold}44` }}>
+                <p style={{ fontSize: fadlFontSize, color: clr.sub, lineHeight: 1.75, marginBottom: 14, paddingRight: 10, borderRight: `2px solid ${clr.gold}44` }}>
                   {z.fadl}
-                  <span style={{ display:"block",fontSize:f.src,marginTop:2,opacity:.65 }}>{z.source}</span>
+                  <span style={{ display: "block", fontSize: srcFontSize, marginTop: 2, opacity: .65 }}>{z.source}</span>
                 </p>
-                <div style={{ display:"flex",gap:10 }}>
+                <div style={{ display: "flex", gap: 10 }}>
                   <button
                     onClick={() => handleCount(z.id, z.count)}
                     disabled={isDone}
                     style={{
-                      flex:1,padding:"14px 10px",borderRadius:14,fontFamily:"inherit",fontWeight:900,
+                      flex: 1, padding: "14px 10px", borderRadius: 14, fontFamily: "inherit", fontWeight: 900,
                       background: isDone ? "#22c55e" : clr.gold,
                       color: isDone ? "#fff" : clr.goldTxt,
                       cursor: isDone ? "default" : "pointer",
-                      transform: pulseId===z.id ? "scale(0.96)" : "scale(1)",
-                      transition:"transform .15s,background .3s",
+                      transform: pulseId === z.id ? "scale(0.96)" : "scale(1)",
+                      transition: "transform .15s,background .3s",
                       boxShadow: isDone ? "0 4px 14px #22c55e33" : `0 4px 14px ${clr.gold}33`,
-                      lineHeight:1.1,
+                      lineHeight: 1.1,
                     }}>
-                    <span style={{ display:"block",fontSize:f.num }}>{isDone ? "✓" : rem}</span>
-                    {!isDone && <span style={{ fontSize:10,opacity:.7,display:"block",marginTop:3 }}>اضغط للعدّ</span>}
+                    <span style={{ display: "block", fontSize: numFontSize }}>{isDone ? "✓" : rem}</span>
+                    {!isDone && <span style={{ fontSize: 10, opacity: .7, display: "block", marginTop: 3 }}>اضغط للعدّ</span>}
                   </button>
+
+                  {/* ─── زر المشاركة — استبدل src بمسار صورتك ─── */}
                   <button onClick={() => share(z)} style={{
-                    width:48,borderRadius:14,border:`1px solid ${clr.border}`,
-                    fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",color:clr.sub,
-                  }} title="مشاركة">📤</button>
+                    width: 48, borderRadius: 14, border: `1px solid ${clr.border}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    background: "transparent", padding: 0, overflow: "hidden",
+                  }} title="مشاركة">
+                    {/* ضع ملف الصورة في مجلد public باسم share-icon.png */}
+                    <img
+                      src="/share-icon.png"
+                      alt="مشاركة"
+                      style={{ width: 26, height: 26, objectFit: "contain" }}
+                      onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+                    />
+                    {/* fallback إيموجي لو الصورة ما وُجدت */}
+                    <span style={{ fontSize: 20, color: clr.sub, display: "none" }}>📤</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -597,91 +707,89 @@ export default function AzkarApp() {
         })}
 
         {allDone && (
-  <div className="up" style={{
-    textAlign:"center",padding:"36px 20px",borderRadius:18,
-    border:clr.greenBdr,background:clr.greenBg,
-  }}>
-    <div style={{ fontSize:52,marginBottom:10 }}>🎉</div>
-    <p style={{ fontSize:20,fontWeight:700,color:"#22c55e",marginBottom:6 }}>أحسنت! اكتملت أذكار {cat}</p>
-    <p style={{ fontSize:13,color:clr.sub,marginBottom:20 }}>تقبّل الله منك</p>
-    <div style={{ display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap" }}>
-      <button onClick={() => reset(azkar)} style={{
-        padding:"10px 28px",borderRadius:14,background:clr.gold,color:clr.goldTxt,
-        fontFamily:"inherit",fontWeight:700,fontSize:14,
-      }}>البدء من جديد</button>
-      <button onClick={async () => {
-        const text = `أكملت أذكار ${cat} اليوم 🤲\nشاركنا أذكارك على موقع أذكاري:\nhttps://athkar.kunooz.co/`;
-        if (navigator.share) {
-          try { await navigator.share({ title:"أذكاري", text }); } catch {}
-        } else {
-          await navigator.clipboard.writeText(text);
-          alert("تم النسخ!");
-        }
-      }} style={{
-        padding:"10px 28px",borderRadius:14,
-        background:"transparent",
-        border:`1px solid ${clr.gold}`,
-        color:clr.gold,
-        fontFamily:"inherit",fontWeight:700,fontSize:14,
-        display:"flex",alignItems:"center",gap:6,
-      }}>
-        <span>📤</span> شارك الموقع
-      </button>
-    </div>
-  </div>
-)}
+          <div className="up" style={{
+            textAlign: "center", padding: "36px 20px", borderRadius: 18,
+            border: clr.greenBdr, background: clr.greenBg,
+          }}>
+            <div style={{ fontSize: 52, marginBottom: 10 }}>🎉</div>
+            <p style={{ fontSize: 20, fontWeight: 700, color: "#22c55e", marginBottom: 6 }}>أحسنت! اكتملت {catConfig.label}</p>
+            <p style={{ fontSize: 13, color: clr.sub, marginBottom: 20 }}>تقبّل الله منك</p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={() => reset(azkar)} style={{
+                padding: "10px 28px", borderRadius: 14, background: clr.gold, color: clr.goldTxt,
+                fontFamily: "inherit", fontWeight: 700, fontSize: 14,
+              }}>البدء من جديد</button>
+              <button onClick={async () => {
+                const text = `أكملت ${catConfig.label} اليوم 🤲\nشاركنا أذكارك على موقع أذكاري:\nhttps://athkar.kunooz.co/`;
+                if (navigator.share) {
+                  try { await navigator.share({ title: "أذكاري", text }); } catch {}
+                } else {
+                  await navigator.clipboard.writeText(text);
+                  alert("تم النسخ!");
+                }
+              }} style={{
+                padding: "10px 28px", borderRadius: 14,
+                background: "transparent", border: `1px solid ${clr.gold}`,
+                color: clr.gold, fontFamily: "inherit", fontWeight: 700, fontSize: 14,
+                display: "flex", alignItems: "center", gap: 6,
+              }}>
+                <span>📤</span> شارك الموقع
+              </button>
+            </div>
+          </div>
+        )}
       </main>
 
+      {/* ─── دليل التثبيت ─── */}
       {showInstallGuide && (
         <div style={{
-          position:"fixed",inset:0,zIndex:200,
-          background:"rgba(0,0,0,0.6)",backdropFilter:"blur(4px)",
-          display:"flex",alignItems:"flex-end",justifyContent:"center",
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)",
+          display: "flex", alignItems: "flex-end", justifyContent: "center",
         }} onClick={() => setShowInstallGuide(false)}>
           <div onClick={e => e.stopPropagation()} style={{
-            width:"100%",maxWidth:520,borderRadius:"20px 20px 0 0",
-            background:clr.card,padding:"24px 20px 36px",
+            width: "100%", maxWidth: 520, borderRadius: "20px 20px 0 0",
+            background: clr.card, padding: "24px 20px 36px",
           }}>
-            <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20 }}>
-              <span style={{ fontWeight:700,fontSize:17,color:clr.txt }}>📲 أضف للشاشة الرئيسية</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <span style={{ fontWeight: 700, fontSize: 17, color: clr.txt }}>📲 أضف للشاشة الرئيسية</span>
               <button onClick={() => setShowInstallGuide(false)} style={{
-                width:28,height:28,borderRadius:"50%",
-                background:clr.pgBg,color:clr.sub,fontSize:16,
-                display:"flex",alignItems:"center",justifyContent:"center",
+                width: 28, height: 28, borderRadius: "50%",
+                background: clr.pgBg, color: clr.sub, fontSize: 16,
+                display: "flex", alignItems: "center", justifyContent: "center",
               }}>✕</button>
             </div>
             {isIOS ? (
-              <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                //  { n:"1", t:"افتح الموقع في متصفح Safari", i:"🧭" },
-                  { n:"1", t:'اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"', i:"⬆️" },
-                  { n:"2", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+                  { n: "1", t: 'اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"', i: "⬆️" },
+                  { n: "2", t: 'اضغط "إضافة" وستجد الأيقونة على شاشتك', i: "✅" },
                 ].map(s => (
-                  <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
+                  <div key={s.n} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{
-                      width:32,height:32,borderRadius:"50%",
-                      background:clr.gold,color:clr.goldTxt,
-                      display:"flex",alignItems:"center",justifyContent:"center",
-                      fontWeight:700,fontSize:14,flexShrink:0,
+                      width: 32, height: 32, borderRadius: "50%",
+                      background: clr.gold, color: clr.goldTxt,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontWeight: 700, fontSize: 14, flexShrink: 0,
                     }}>{s.n}</span>
-                    <span style={{ fontSize:14,color:clr.txt,lineHeight:1.6 }}>{s.i} {s.t}</span>
+                    <span style={{ fontSize: 14, color: clr.txt, lineHeight: 1.6 }}>{s.i} {s.t}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ display:"flex",flexDirection:"column",gap:14 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-              //    { n:"1", t:"افتح الموقع في متصفح Chrome", i:"🌐" },
-{ n:"1", t:'اضغط على الثلاث نقاط في أعلى الشاشة ⋮ ثم "إضافة إلى الشاشة الرئيسية"', i:"⋮" },                  { n:"2", t:'اضغط "إضافة" وستجد الأيقونة على شاشتك', i:"✅" },
+                  { n: "1", t: 'اضغط على الثلاث نقاط في أعلى الشاشة ⋮ ثم "إضافة إلى الشاشة الرئيسية"', i: "⋮" },
+                  { n: "2", t: 'اضغط "إضافة" وستجد الأيقونة على شاشتك', i: "✅" },
                 ].map(s => (
-                  <div key={s.n} style={{ display:"flex",alignItems:"center",gap:12 }}>
+                  <div key={s.n} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{
-                      width:32,height:32,borderRadius:"50%",
-                      background:clr.gold,color:clr.goldTxt,
-                      display:"flex",alignItems:"center",justifyContent:"center",
-                      fontWeight:700,fontSize:14,flexShrink:0,
+                      width: 32, height: 32, borderRadius: "50%",
+                      background: clr.gold, color: clr.goldTxt,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontWeight: 700, fontSize: 14, flexShrink: 0,
                     }}>{s.n}</span>
-                    <span style={{ fontSize:14,color:clr.txt,lineHeight:1.6 }}>{s.i} {s.t}</span>
+                    <span style={{ fontSize: 14, color: clr.txt, lineHeight: 1.6 }}>{s.i} {s.t}</span>
                   </div>
                 ))}
               </div>
@@ -690,24 +798,25 @@ export default function AzkarApp() {
         </div>
       )}
 
+      {/* ─── الإعلان ─── */}
       {showAd && (
         <div style={{
-          position:"fixed",bottom:0,left:0,right:0,zIndex:100,
-          display:"flex",flexDirection:"column",alignItems:"center",
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
+          display: "flex", flexDirection: "column", alignItems: "center",
         }}>
           <button onClick={() => setShowAd(false)} style={{
-            alignSelf:"flex-end",marginBottom:2,marginLeft:8,marginRight:8,
-            width:24,height:24,borderRadius:"50%",
-            background:"rgba(0,0,0,0.5)",color:"#fff",
-            fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",
-            cursor:"pointer",border:"none",lineHeight:1,
+            alignSelf: "flex-end", marginBottom: 2, marginLeft: 8, marginRight: 8,
+            width: 24, height: 24, borderRadius: "50%",
+            background: "rgba(0,0,0,0.5)", color: "#fff",
+            fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", border: "none", lineHeight: 1,
           }}>✕</button>
           <div style={{
-            width:"100%",maxWidth:520,minHeight:60,
+            width: "100%", maxWidth: 520, minHeight: 60,
             background: dark ? "#1a1d27" : "#fff",
-            borderTop:`1px solid ${clr.border}`,
-            display:"flex",alignItems:"center",justifyContent:"center",
-            padding:"8px 16px",
+            borderTop: `1px solid ${clr.border}`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "8px 16px",
           }}>
             {/* === كود الإعلان === */}
             {/* === نهاية كود الإعلان === */}
@@ -715,14 +824,15 @@ export default function AzkarApp() {
         </div>
       )}
 
+      {/* ─── Footer ─── */}
       <footer style={{
-        position:"fixed",bottom: showAd ? 76 : 0,left:0,right:0,
-        background:clr.card,borderTop:`1px solid ${clr.border}`,
-        padding:"8px 16px",textAlign:"center",
-        transition:"bottom .3s ease",zIndex:99,
+        position: "fixed", bottom: showAd ? 76 : 0, left: 0, right: 0,
+        background: clr.card, borderTop: `1px solid ${clr.border}`,
+        padding: "8px 16px", textAlign: "center",
+        transition: "bottom .3s ease", zIndex: 99,
       }}>
-        <p style={{ fontSize:12,color:clr.sub }}>
-          {allDone ? `✓ اكتملت أذكار ${cat}` : done===0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
+        <p style={{ fontSize: 12, color: clr.sub }}>
+          {allDone ? `✓ اكتملت ${catConfig.label}` : done === 0 ? "اضغط على أي بطاقة للبدء" : `${done} من ${azkar.length} ذكر مكتمل`}
         </p>
       </footer>
     </div>
